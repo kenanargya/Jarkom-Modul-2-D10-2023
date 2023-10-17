@@ -59,6 +59,10 @@ echo 'nameserver 192.196.2.2 # IP Yudhistira
 nameserver 192.196.2.3 # IP Werkudara' > /etc/resolv.conf
 ```
 
+### Penjelasan
+
+Pada node yudhistira (DNS master) kita perlu kofigurasi pada named.conf.local untuk nama website arjuna.d10.com yang berletak pada `/etc/bind/jarkom/arjuna.d10.com`. Lalu kita mkdir folder jarkom dilanjutkan dengan setup file arjuna.d10.com nya, pada file tersebut kita beri recordname www agar dapat dikenali sebagai www.arjuna.d10.com dan juga mengarah kepada node arjuna (192.196.3.5). Lalu sebagai tes awal kita install library yang diperlukan dan juga input IP yudhistira dan werkudara pada `/etc/resolv.conf`.
+
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/0b9ed8cf-5f6d-4af1-8261-e75edc58d030)
 
@@ -102,6 +106,10 @@ www     	IN      CNAME   abimanyu.d10.com.
 @       	IN      AAAA    ::1' > /etc/bind/jarkom/abimanyu.d10.com
 ```
 
+### Penjelasan
+
+Pada node yudhistira (DNS master) kita perlu kofigurasi pada named.conf.local untuk nama website abimanyu.d10.com yang berletak pada `/etc/bind/jarkom/abimanyu.d10.com`. Lalu kita gunakan folder jarkom yang telah dibuat sebelumnya dilanjutkan dengan setup file abimanyu.d10.com nya, pada file tersebut kita beri recordname www agar dapat dikenali sebagai www.abimanyu.d10.com dan juga mengarah kepada node abimanyu (192.196.3.3).
+
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/756ece06-621a-4fbe-95db-bd937b85a2fe)
 
@@ -129,6 +137,10 @@ parikesit	IN	A	192.196.3.3	; IP Abimanyu
 www.parikesit	IN	CNAME	parikesit 
 @       	IN      AAAA    ::1' > /etc/bind/jarkom/abimanyu.d10.com
 ```
+
+### Penjelasan
+
+Pada node yudhistira kita perlu kofigurasi pada `/etc/bind/jarkom/abimanyu.d10.com` untuk subdomain `parikesit` yang mengarah pada node abimanyu (192.196.3.3) dan juga record name `www.parikesit` nya.
 
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/39920992-0031-4a98-a7d4-1aee7c894b15)
@@ -172,9 +184,13 @@ $TTL    604800
                          604800 )       ; Negative Cache TTL
 ;
 3.196.192.in-addr.arpa. IN      NS      abimanyu.d10.com.
-3                       IN      PTR     abimanyu.d10.com. ; Byte ke-5 abimanyu
+3                       IN      PTR     abimanyu.d10.com. ; Byte ke-4 abimanyu
 ' > /etc/bind/jarkom/3.196.192.in-addr.arpa
 ```
+
+### Penjelasan
+
+Pada node yudhistira perlu dilakukan penyesuaian untuk menambahkan zone `"3.196.192.in-addr.arpa"` pada named.conf.local yang berada pada `/etc/bind/jarkom/3.196.192.in-addr.arpa`. Lalu dilakukan penyesuaian sebagaimana tertera untuk reverse domain abimanyu di file `/etc/bind/jarkom/3.196.192.in-addr.arpa`.
 
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/68969851-8cad-4050-a4f4-caa3e2807809)
@@ -218,6 +234,10 @@ mkdir /etc/bind/baratayuda
 
 cp /etc/bind/db.local /etc/bind/baratayuda/baratayuda.abimanyu.d10.com
 ```
+
+### Penjelasan
+
+Pada node yudhistira di file named.conf.local perlu ditambahkan penyesuaian `also-notify { 192.196.2.3; }; allow-transfer { 192.196.2.3; };` pada zone abimanyu. Dilanjutkan dengan penyesuaian pada node werkudara dengan menambahkan kofigurasi zone slave abimanyu pada file named.conf.local.
 
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/23633d4c-5129-44ed-a910-68e8afe3aa84)
@@ -285,6 +305,10 @@ mkdir /etc/bind/baratayuda
 
 cp /etc/bind/db.local /etc/bind/baratayuda/baratayuda.abimanyu.d10.com
 ```
+
+### Penjelasan
+
+Pertama pada node yudhistira perlu dilakukan penyesuaian konfigurasi pada `/etc/bind/jarkom/abimanyu.d10.com` dengan menambahkan baratayuda sebagai ns1 yang mengarah pada node werkudara (192.196.2.3) dan penyesuaian pada file `named.conf.options` dengan uncomment sebuah line dan menambahkan line `allow-query{any;};`. Dilanjutkan pada node werkudara dengan penyesuaian file `named.conf.options` yang sama seperti pada yudhistira dan pembuatan zone baratayuda.abimanyu.d10.com yang berada pada file `/etc/bind/baratayuda/baratayuda.abimanyu.d10.com`, lalu mkdir folder bersangkutan dan cp db.local ke file tersebut.
 
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/b53eb277-9116-492c-9093-01582a271747)
@@ -466,6 +490,10 @@ service php7.0-fpm restart
 
 rm -rf /etc/nginx/sites-enabled/default
 ```
+
+### Penjelasan
+
+Tahap pertama kita perlu deploy website sebagai nginx worker pada node yang bersangkutan, penyesuaian load balancer akan dijelaskan pada nomor 10. Pada masing-masing node perlu dilakukan mkdir folder `/var/www/arjuna.d10`, dilanjutkan dengan download zip file untuk domain worker tersebut menggunakan `wget`, lalu unzip file zip tersebu dengan `unzip`, kemudian pindah file-file yang ada pada dalam hasil unzip ke folder yang sesuai yaitu `/var/www/arjuna.d10/`, lalu delete file zip dengan `rm`. Tahap selanjutnya penyesuaian konfigurasi worker pada file `/etc/nginx/sites-available/arjuna.d10` dengan server name "arjuna.d10.com". Kemudian atur arjuna.d10 pada `/etc/nginx/sites-enabled` menggunakan `ln -s` dan terakhir start, restart nginx serta rm directory `/etc/nginx/sites-enabled/default`.
 
 ### Output
 Prabukusuma   
