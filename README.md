@@ -76,8 +76,6 @@ zone "abimanyu.d10.com" {
 };
 ' > /etc/bind/named.conf.local
 
-cp /etc/bind/db.local /etc/bind/jarkom/abimanyu.d10.com
-
 mkdir /etc/bind/jarkom
 
 cp /etc/bind/db.local /etc/bind/jarkom/abimanyu.d10.com
