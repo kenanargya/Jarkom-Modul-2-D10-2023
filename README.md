@@ -177,6 +177,48 @@ $TTL    604800
 ## 6. 
 Agar dapat tetap dihubungi ketika DNS Server Yudhistira bermasalah, buat juga Werkudara sebagai DNS Slave untuk domain utama.
 
+### Penyelesaian
+```.sh
+echo 'zone "arjuna.d10.com" {
+    type master;
+    file "/etc/bind/jarkom/arjuna.d10.com";
+};
+zone "abimanyu.d10.com" {
+    type master;
+    also-notify { 192.196.2.3; };
+    allow-transfer { 192.196.2.3; };
+    file "/etc/bind/jarkom/abimanyu.d10.com";
+};
+zone "3.196.192.in-addr.arpa" {
+    type master;
+    file "/etc/bind/jarkom/3.196.192.in-addr.arpa";
+};
+' > /etc/bind/named.conf.local
+
+service bind9 restart
+```
+
+```.sh
+echo 'zone "abimanyu.d10.com" {
+    type slave;
+    masters { 192.196.2.2; }; // Masukan IP Yudhistira tanpa tanda petik
+    file "/var/lib/bind/abimanyu.d10.com";
+};
+' > /etc/bind/named.conf.local
+```
+
+### Output
+![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/23633d4c-5129-44ed-a910-68e8afe3aa84)
+![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/94dd41b7-0c09-4b3e-9378-010ea5d34d10)
+
+## 7.
+
+###
+
+
+
+
+
 
 
 
