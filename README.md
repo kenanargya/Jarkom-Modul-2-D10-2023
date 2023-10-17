@@ -534,6 +534,11 @@ echo '# Default menggunakan Round Robin
 ln -s /etc/nginx/sites-available/lb-arjuna.d10 /etc/nginx/sites-enabled
 ```
 
+### Penjelasan
+
+Berhunungan dengan soal sebelumnya perlu kita setting arjuna sebagai load balancer pada `/etc/nginx/sites-available/lb-arjuna.d10` di bagian upstream myweb yang mengarah pada masing-masing IP worker dengan port yang berbeda serta pengaturan upstream tertera adalah round robin by default.
+
+
 ### Output
 Prabukusuma   
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/bd1fda61-5455-45c3-9535-c9445fb0c07b)
@@ -548,6 +553,7 @@ Wisanggeni
 Selain menggunakan Nginx, lakukan konfigurasi Apache Web Server pada worker Abimanyu dengan web server www.abimanyu.yyy.com. Pertama dibutuhkan web server dengan DocumentRoot pada /var/www/abimanyu.yyy
 
 ### Penyelesaian
+abimanyu
 ```.sh
 echo '
 <VirtualHost *:80>
@@ -593,6 +599,10 @@ echo '
 ' > /etc/apache2/sites-available/abimanyu.d10.com.conf
 ```
 
+### Penjelasan
+
+Pada node abimanyu kita perlu atur virtualhost apache (sebelumnya telah diinstal library apache2). Dilanjutkan dengan pembuatan folder `mkdir /var/www/abimanyu.d10`, lalu download file zip domain bersangkutan dengan `wget`, kemudian unzip file tersebut dengan `unzip` dan pindah file-file hasil unzip dengan `mv` pada folder `/var/www/abimanyu.d10/`, lalu delete file zip dengan `rm`. Langkah berikutnya kita setting virtualhost abimanyu dengan servername abimanyu.d10.com dan alias dengan www pada `abimanyu.d10.com.conf`.
+
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/84fe3729-7f8c-4d80-b0a1-f35eceb72ad8)
 
@@ -611,6 +621,10 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([^\.]+)$ index.php/$1 [NC,L]
 ' > /var/www/abimanyu.d10/.htaccess
 ```
+
+### Penjelasan
+
+Setting cukup sederhana pada node abimanyu cukup atur command tertera pada `/var/www/abimanyu.d10/.htaccess` untuk rewrite request file name sesuai aturan regex tertera.
 
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/bbb6e875-5005-4eaf-a51d-a1eff9c748c7)
@@ -645,6 +659,11 @@ echo '
 
 a2ensite parikesit.abimanyu.d10.com
 ```
+
+### Penjelasan
+
+Tahap setup domain tidak jauh berbeda dengan nomor 11 untuk domain abimanyu.d10.com, yang berbeda adalah file zip domain bersangkutan dan nama foldernya adalah `/var/www/parikesit.abimanyu.d1` serta server name parikesit.abimanyu.d10.com.
+
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/4050e2ef-16ce-4416-a6a3-7713af702064)
 
@@ -652,6 +671,7 @@ a2ensite parikesit.abimanyu.d10.com
 Pada subdomain tersebut folder /public hanya dapat melakukan directory listing sedangkan pada folder /secret tidak dapat diakses (403 Forbidden).
 
 ### Penyelesaian
+abimanyu
 ```.sh
 echo '
 <VirtualHost *:80>
@@ -681,6 +701,10 @@ echo '
    	</VirtualHost>
 ' > /etc/apache2/sites-available/parikesit.abimanyu.d10.com.conf
 ```
+
+### Penjelasan
+
+Pengaturan sederhana pada node abimanyu untuk konfigurasi `/etc/apache2/sites-available/parikesit.abimanyu.d10.com.conf` dengan menambahkan `<Directory /var/www/parikesit.abimanyu.d10/secret> Options -Indexes </Directory>` untuk deny directory listing pada folder secret.
 
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/45a2cd59-bc18-4c48-b619-c1b9efa015e9)  
@@ -719,6 +743,11 @@ echo '
    	</VirtualHost>
 ' > /etc/apache2/sites-available/parikesit.abimanyu.d10.com.conf
 ```
+
+### Penjelasan
+
+Pengaturan sederhana pada node abimanyu untuk konfigurasi `/etc/apache2/sites-available/parikesit.abimanyu.d10.com.conf` dengan menambahkan `ErrorDocument 404 /error/404.html ErrorDocument 403 /error/403.html` untuk custom error page.
+
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/a7babdc3-bb26-4335-89a1-71da6895da59)
 
@@ -757,6 +786,11 @@ echo '
    	</VirtualHost>
 ' > /etc/apache2/sites-available/parikesit.abimanyu.d10.com.conf
 ```
+
+### Penjelasan
+
+Pengaturan sederhana pada node abimanyu untuk konfigurasi `/etc/apache2/sites-available/parikesit.abimanyu.d10.com.conf` dengan menambahkan directory alias `Alias "/js" "/var/www/parikesit.abimanyu.d10/public/js"`.
+
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/dbf18adb-f32b-4c08-86c9-a61caea67d31)
 
@@ -764,6 +798,7 @@ echo '
 Agar aman, buatlah konfigurasi agar www.rjp.baratayuda.abimanyu.yyy.com hanya dapat diakses melalui port 14000 dan 14400.
 
 ### Penyelesaian
+abimanyu
 ```.sh
 wget -O /var/www/rjp.baratayuda.abimanyu.d10.zip "https://drive.google.com/u/0/uc?id=1pPSP7yIR05JhSFG67RVzgkb-VcW9vQO6&export=download"
 
@@ -829,6 +864,11 @@ Listen 14400
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet
 ' > /etc/apache2/ports.conf
 ```
+
+### Penjelasan
+
+Tahap setup domain tidak jauh berbeda dengan nomor 11 dan 13 untuk domain rjp.baratayuda.abimanyu.d10.com, yang berbeda adalah file zip domain bersangkutan dan nama foldernya adalah `/var/www/rjp.baratayuda.abimanyu.d10` serta server name rjp.baratayuda.abimanyu.d10.com. Untuk setting port dengan penyesuaian pada file konfigurasi `/etc/apache2/sites-available/rjp.baratayuda.abimanyu.d10.com.conf` virtualhost dengan duplikat element virtual host dan mengganti masing-masing dengan `<VirtualHost *:14000>` dan `<VirtualHost *:14400>`. Terakhir penyesuaian listen port 14000 dan 14400 pada file `/etc/apache2/ports.conf`.
+
 ### Output
 Port 14400  
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/d6d3fed2-7c09-4eaf-a593-333786562bab)
@@ -840,6 +880,7 @@ Port 14000
 Untuk mengaksesnya buatlah autentikasi username berupa “Wayang” dan password “baratayudayyy” dengan yyy merupakan kode kelompok. Letakkan DocumentRoot pada /var/www/rjp.baratayuda.abimanyu.yyy.
 
 ### Penyelesaian
+abimanyu
 ```.sh
 echo 'Wayang:$apr1$bqoKoaRn$LezUrevcJ5SQN6MT9DcbA/' > /var/www/rjp.baratayuda.abimanyu.d10/.htpasswd
 
@@ -848,6 +889,10 @@ AuthName "Authentication Required"
 AuthUserFile /var/www/rjp.baratayuda.abimanyu.d10/.htpasswd
 Require valid-user' > /var/www/rjp.baratayuda.abimanyu.d10/.htaccess
 ```
+
+### Penjelasan
+
+Dilakukan penyesuaian sederhana dengan membuat file `/var/www/rjp.baratayuda.abimanyu.d10/.htaccess` dengan kofigurasi password di `/var/www/rjp.baratayuda.abimanyu.d10/.htpasswd` sebagaimana tertera.
 
 ### Output
 Username  
@@ -882,6 +927,10 @@ echo '
 ' > /etc/apache2/sites-available/abimanyu.d10.com.conf
 ```
 
+### Penjelasan
+
+Pada node abimanyu file `/etc/apache2/sites-available/abimanyu.d10.com.conf` cukup menambahkan line `ServerAlias 192.196.3.3`
+
 ### Output
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/891378f6-7ca7-46ec-9743-c26d78333fba)
 
@@ -894,6 +943,10 @@ echo '
 RedirectMatch 302 /public/images/.*abimanyu.*\.(png|jpg|jpeg)$ /public/images/abimanyu.png
 ' > /var/www/parikesit.abimanyu.d10/public/images/.htaccess
 ```
+
+### Penjelasan
+
+Command redirectMatch dimasukkan ke `/var/www/parikesit.abimanyu.d10/public/images/.htaccess` dengan kofigurasi regex tertera sehingga ketika user request gambar (png || jpg || jpeg) akan diredirect ke `/public/images/abimanyu.png`.
 
 ### Output
 Dengan Substring Abimanyu  
