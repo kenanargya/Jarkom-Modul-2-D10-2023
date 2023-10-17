@@ -822,7 +822,7 @@ Require valid-user' > /var/www/rjp.baratayuda.abimanyu.d10/.htaccess
 ```
 
 ### Output
-Username
+Username  
 ![image](https://github.com/kenanargya/Jarkom-Modul-2-D10-2023/assets/92387421/18f6067d-00e0-4382-b4d4-7a7e8e40447f)
 
 Password  
